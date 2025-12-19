@@ -24,6 +24,16 @@ class Pitch:
         note = NOTE_NAMES[self.midi_index % 12]
         return f"{note}{octave}"
     
+    @property
+    def note_name(self) -> str:
+        """Returns the pitch name without the octave number (e.g., C, D#, Eb). Does not adjust to key signature."""
+        return NOTE_NAMES[self.midi_index % 12]
+    
+    @property
+    def octave(self) -> int:
+        """Returns the octave number of the pitch."""
+        return (self.midi_index // 12) - 1
+    
     @classmethod
     def from_name(cls, name: str) -> 'Pitch':
         note_part = name[:-1]
@@ -44,6 +54,13 @@ class Pitch:
                 raise ValueError(f"Invalid alteration character: {char}")
         midi_index = (octave_part + 1) * 12 + letter_index + alterations_index
         return cls(midi_index)
+    
+    @classmethod
+    def from_note_name(cls, note_name: str, octave: int=4) -> 'Pitch':
+        """Constructs a Pitch from a note name and octave number. By default, octave is 4."""
+        if octave < 0 or octave > 9:
+            raise ValueError("Octave must be within 0 and 9")
+        return cls.from_name(f"{note_name}{octave}")
 
     def __str__(self) -> str:
         return self.name
