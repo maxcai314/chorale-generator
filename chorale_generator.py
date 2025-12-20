@@ -31,15 +31,18 @@ class ChoraleGenerator:
             prev = self.chorale.get_soprano_note(index - 1) if index > 0 else None
             if prev is None:
                 return (0, self.random.random())  # no context, keep it mostly random
+            is_ending = (index == self.chorale.num_chords() - 1)
             interval = abs(prev.distance_to(note))
             if interval == 0:
-                category = 12  # repeated note
+                motion_cost = 12  # repeated note
             elif interval <= 2:
-                category = 10  # stepwise (m2/M2)
+                motion_cost = 10  # stepwise (m2/M2)
             elif interval <= 4:
-                category = 15  # small leap (m3/M3)
+                motion_cost = 15  # small leap (m3/M3)
             else:
-                category = 30  # larger leap
+                motion_cost = 30  # larger leap
+                if is_ending:
+                    motion_cost += 20  # discourage large leaps into final note
             # if contrary motion with bass, prioritize more
             bass_note = self.chorale.get_bass_note(index)
             prev_bass = self.chorale.get_bass_note(index - 1) if index > 0 else None
@@ -48,12 +51,12 @@ class ChoraleGenerator:
                 soprano_motion = note.distance_to(prev) if prev is not None else 0
                 motion_product = bass_motion * soprano_motion
                 if motion_product < 0:
-                    category -= 3  # strongly favor contrary motion
+                    motion_cost -= 1  # favor contrary motion
                 elif motion_product == 0:
-                    category -= 1  # favor oblique motion
+                    motion_cost -= 0  # neutral to oblique motion
                 else:
-                    category += 3  # disfavor similar motion
-            return (self.random.randint(0, category), self.random.random())
+                    motion_cost += 1  # disfavor similar motion
+            return (self.random.randint(0, motion_cost), self.random.random())
         
         candidate_notes = list((i, motion_key(i)) for i in self.chorale.get_soprano_candidates(index))
         candidate_notes.sort(key=lambda x: x[1])  # sort by motion preference

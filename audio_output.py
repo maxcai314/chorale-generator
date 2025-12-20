@@ -23,7 +23,7 @@ def chorales_to_midi_file(chorales: List[Chorale], filename: str, bpm: int = 80)
     track.append(MetaMessage('set_tempo', tempo=bpm2tempo(bpm), time=0))
     # 0 for Acoustic Grand Piano, 20 for Church Organ, 60 for Muted Trumpet
     # https://midiprog.com/program-numbers/
-    track.append(Message('program_change', program=60, time=0))
+    track.append(Message('program_change', program=0, time=0))
 
     attack_velocity = 96
     note_offset = tpb // 256  # slight offset to avoid note-on and note-off at same tick

@@ -127,11 +127,10 @@ if __name__ == "__main__":
         (Pitch.from_note_name("F", 3),  TonalChord(ScaleDegree.SUPERTONIC,  ChordQuality.DIMINISHED)),  # ii°6
         (Pitch.from_note_name("G", 3),  TonalChord(ScaleDegree.TONIC,       ChordQuality.MINOR)),       # i6/4 (cadential)
         (Pitch.from_note_name("G", 3),  TonalChord(ScaleDegree.DOMINANT,    ChordQuality.MAJOR)),       # V (uses B♮ implied)
-        (Pitch.from_note_name("Ab", 3), TonalChord(ScaleDegree.SUBMEDIANT,  ChordQuality.MAJOR)),       # VI
     ]
 
     c_minor_soprano_hints = {
-        0: Pitch.from_note_name("C", 5),   # starting pitch
+        # 0: Pitch.from_note_name("C", 5),   # starting pitch
     }
 
     test_chorale_generator_multi(c_minor_key, c_minor_bass_harmonizations, c_minor_soprano_hints,
