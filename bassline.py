@@ -29,6 +29,12 @@ class HarmonizedBassline:
         harmonization = self.bass_harmonizations[index]
         return harmonization[1]
     
+    def get_chord_tones(self, index: int) -> List[Pitch]:
+        """Returns the list of chord tones for the chord at the given index, adjusted to the key signature."""
+        harmonization = self.bass_harmonizations[index]
+        chord = harmonization[1]
+        return chord.get_chord_tones(self.key_signature)
+    
     def get_harmonization(self, index: int) -> Tuple[Pitch, TonalChord]:
         """Returns the (bass pitch, chord) tuple at the given index."""
         harmonization = self.bass_harmonizations[index]
@@ -48,6 +54,10 @@ class HarmonizedBassline:
             if bass.note_name_equals(note):
                 return i  # Inversion number is the index of the bass note in the chord tones
         return -1  # Bass note is not a chord tone
+    
+    def copy(self) -> 'HarmonizedBassline':
+        """Returns a copy of the HarmonizedBassline."""
+        return HarmonizedBassline(self.key_signature, self.bass_harmonizations)
 
     def __str__(self):
         result = f"HarmonizedBassline in {self.key_signature}\n"

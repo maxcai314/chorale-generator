@@ -66,6 +66,11 @@ MINOR_SCALE_INTERVALS: Dict[ScaleDegree, int] = {
     ScaleDegree.LEADING_TONE: 10,
 }
 
+def scale_degree_to_interval(scale_degree: ScaleDegree, key_signature: KeySignature) -> int:
+    """This should really be a method on KeySignature, but this works for now"""
+    scale_intervals = MAJOR_SCALE_INTERVALS if key_signature.is_major else MINOR_SCALE_INTERVALS
+    return scale_intervals[scale_degree]
+
 # represent a tonal chord; can be implemented in any key signature
 class TonalChord:
     def __init__(self, scale_degree: ScaleDegree, quality: ChordQuality):
@@ -111,8 +116,7 @@ class TonalChord:
     
     def get_chord_tones(self, key_signature: KeySignature) -> List[Pitch]:
         """Get the pitches of the chord tones based on the key root."""
-        scale_intervals = MAJOR_SCALE_INTERVALS if key_signature.is_major else MINOR_SCALE_INTERVALS
-        root_interval = scale_intervals[self.scale_degree]
+        root_interval = scale_degree_to_interval(self.scale_degree, key_signature)
         chord_root = key_signature.tonic.plus_interval(root_interval)
         chord_tones = CHORD_TONE_OFFSETS[self.quality]
         return [chord_root.plus_interval(semitone) for semitone in chord_tones]
