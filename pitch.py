@@ -80,6 +80,10 @@ class Pitch:
         """Returns the absolute distance in semitones between self and other."""
         return abs(other.midi_index - self.midi_index)
     
+    def note_name_equals(self, other: 'Pitch') -> bool:
+        """Returns whether two notes are equal in note name, ignoring octave. For example, C4 and C5 are equal."""
+        return (self.midi_index % 12) == (other.midi_index % 12)
+    
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, Pitch):
             return NotImplemented
