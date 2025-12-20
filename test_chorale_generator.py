@@ -76,7 +76,7 @@ def test_chorale_generator_multi(key_signature: KeySignature,
     return result
 
 if __name__ == "__main__":
-    c_major_key = KeySignature(Pitch.from_note_name("Bb"), is_major=True)
+    b_flat_major_key = KeySignature(Pitch.from_note_name("Bb"), is_major=True)
     bass_harmonizations = [  # I V6 I I6 ii V I
         (Pitch.from_note_name("Bb", 2), TonalChord(ScaleDegree.TONIC, ChordQuality.MAJOR)),
         (Pitch.from_note_name("A", 2), TonalChord(ScaleDegree.DOMINANT, ChordQuality.MAJOR)),
@@ -91,7 +91,7 @@ if __name__ == "__main__":
     }
     soprano_hints = {}  # no hints
 
-    test_chorale_generator_multi(c_major_key, bass_harmonizations, soprano_hints,
+    test_chorale_generator_multi(b_flat_major_key, bass_harmonizations, soprano_hints,
                                  seed_seed=12345, num_trials=3,
                                  bpm=120,
                                  midi_filename="out/test_major_chorale_output.mid",
