@@ -2,6 +2,16 @@
 
 from typing import List, Dict
 from enum import Enum, IntEnum
+from pitch import Pitch  # Assuming pitch.py is in the same directory
+
+class KeySignature:
+    def __init__(self, tonic: Pitch, is_major: bool = True):
+        self.tonic = tonic
+        self.is_major = is_major
+    
+    def __str__(self):
+        key_type = "Major" if self.is_major else "Minor"
+        return f"{self.tonic.note_name} {key_type}"
 
 class ChordQuality(Enum):
     MAJOR = "major"
@@ -56,19 +66,33 @@ MINOR_SCALE_INTERVALS: Dict[ScaleDegree, int] = {
     ScaleDegree.LEADING_TONE: 10,
 }
 
-if __name__ == "__main__":
-    from pitch import Pitch  # Assuming pitch.py is in the same directory
+# represent a tonal chord; can be implemented in any key signature
+class TonalChord:
+    def __init__(self, scale_degree: ScaleDegree, quality: ChordQuality):
+        self.scale_degree = scale_degree
+        self.quality = quality
+    
+    def __str__(self):
+        return f"{self.quality.value} chord on {self.scale_degree.name.lower()}"
+    
+    def get_chord_tones(self, key_signature: KeySignature) -> List[Pitch]:
+        """Get the pitches of the chord tones based on the key root."""
+        scale_intervals = MAJOR_SCALE_INTERVALS if key_signature.is_major else MINOR_SCALE_INTERVALS
+        root_interval = scale_intervals[self.scale_degree]
+        chord_root = key_signature.tonic.plus_interval(root_interval)
+        chord_tones = CHORD_TONE_OFFSETS[self.quality]
+        return [chord_root.plus_interval(semitone) for semitone in chord_tones]
 
+
+if __name__ == "__main__":
     # Example usage: Create a V7 (dominant seventh) chord in C major
-    key_root = Pitch.from_note_name("C", 4)
-    dominant_root = key_root.plus_interval(MAJOR_SCALE_INTERVALS[ScaleDegree.DOMINANT])
-    chord_tones = CHORD_TONE_OFFSETS[ChordQuality.DOMINANT_SEVENTH]
-    chord_pitches = [dominant_root.plus_interval(semitone) for semitone in chord_tones]
-    print("Dominant Seventh Chord in C Major:", [str(p) for p in chord_pitches])
+    major_key = KeySignature(Pitch.from_note_name("C"), is_major=True)
+    V7_chord = TonalChord(ScaleDegree.DOMINANT, ChordQuality.DOMINANT_SEVENTH)
+    V7_chord_tones = V7_chord.get_chord_tones(major_key)
+    print(f"V7 Chord in {major_key}: {[str(p) for p in V7_chord_tones]}")
 
     # create ii diminished chord in A minor
-    key_root_minor = Pitch.from_note_name("A", 4)
-    supertonic_root = key_root_minor.plus_interval(MINOR_SCALE_INTERVALS[ScaleDegree.SUPERTONIC])
-    diminished_chord_tones = CHORD_TONE_OFFSETS[ChordQuality.DIMINISHED]
-    diminished_chord_pitches = [supertonic_root.plus_interval(semitone) for semitone in diminished_chord_tones]
-    print("ii diminished Chord in A Minor:", [str(p) for p in diminished_chord_pitches])
+    minor_key = KeySignature(Pitch.from_note_name("A"), is_major=False)
+    ii_chord = TonalChord(ScaleDegree.SUPERTONIC, ChordQuality.DIMINISHED)
+    ii_chord_tones = ii_chord.get_chord_tones(minor_key)
+    print(f"ii diminished Chord in {minor_key}: {[str(p) for p in ii_chord_tones]}")
