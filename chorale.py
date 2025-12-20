@@ -1,4 +1,4 @@
-# Soprano-Bass first-species counterpoint chorale generator
+# Soprano-Bass first-species counterpoint chorale structure.
 # There is no formal rhythm; each chord aligns with one note in the soprano and one note in the bass.
 
 from typing import List, Optional, Tuple
