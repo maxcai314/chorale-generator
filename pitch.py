@@ -84,6 +84,9 @@ class Pitch:
         """Returns whether two notes are equal in note name, ignoring octave. For example, C4 and C5 are equal."""
         return (self.midi_index % 12) == (other.midi_index % 12)
     
+    def __hash__(self):
+        return hash(self.midi_index)
+
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, Pitch):
             return NotImplemented

@@ -72,6 +72,40 @@ class TonalChord:
         self.scale_degree = scale_degree
         self.quality = quality
     
+    @property
+    def roman_numeral(self) -> str:
+        numeral_map = {
+            ScaleDegree.TONIC: "I",
+            ScaleDegree.SUPERTONIC: "II",
+            ScaleDegree.MEDIANT: "III",
+            ScaleDegree.SUBDOMINANT: "IV",
+            ScaleDegree.DOMINANT: "V",
+            ScaleDegree.SUBMEDIANT: "VI",
+            ScaleDegree.LEADING_TONE: "VII",
+        }
+        numeral = numeral_map[self.scale_degree]
+        if self.quality in {ChordQuality.MAJOR, ChordQuality.MAJOR_SEVENTH, ChordQuality.DOMINANT_SEVENTH}:
+            return numeral.upper()
+        else:
+            return numeral.lower()
+    
+    @property
+    def text_label(self) -> str:
+        roman_numeral = self.roman_numeral
+        quality_symbol_map = {
+            ChordQuality.MAJOR: "",
+            ChordQuality.MINOR: "",
+            ChordQuality.DIMINISHED: "o",
+            ChordQuality.AUGMENTED: "+",
+            ChordQuality.MAJOR_SEVENTH: "7",
+            ChordQuality.MINOR_SEVENTH: "7",
+            ChordQuality.DOMINANT_SEVENTH: "dom7",
+            ChordQuality.HALF_DIMINISHED_SEVENTH: "ø7",
+            ChordQuality.DIMINISHED_SEVENTH: "o7",
+        }
+        quality_symbol = quality_symbol_map[self.quality]
+        return f"{roman_numeral}{quality_symbol}"
+    
     def __str__(self):
         return f"{self.quality.value} chord on {self.scale_degree.name.lower()}"
     
