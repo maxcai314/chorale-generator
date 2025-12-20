@@ -3,6 +3,7 @@ from tonality import ScaleDegree, TonalChord, KeySignature, ChordQuality, scale_
 from bassline import HarmonizedBassline
 from chorale import Chorale
 from chorale_generator import ChoraleGenerator
+from audio_output import chorale_to_midi_file, convert_midi_to_wav
 
 if __name__ == "__main__":
     c_major_key = KeySignature(Pitch.from_note_name("Bb"), is_major=True)
@@ -27,3 +28,11 @@ if __name__ == "__main__":
         print(generator.chorale)
     else:
         print("Failed to generate a valid soprano line.")
+        exit(1)
+
+    midi_filename = "out/test_chorale_output.mid"
+    audio_filename = "out/test_chorale_output.wav"
+
+    chorale_to_midi_file(generator.chorale, midi_filename)
+    convert_midi_to_wav(midi_filename, audio_filename)
+    print("Done.")
