@@ -26,9 +26,42 @@ class ChoraleGenerator:
             else:
                 return self._try_generate_soprano_for_index(index + 1)
 
-        candidate_notes = list(self.chorale.get_soprano_candidates(index))
-        # an algorithm could sort using some heuristic to prioritize conjunct motion here
-        self.random.shuffle(candidate_notes)  # Randomize order to get different results on different runs
+        # Prioritize static/stepwise motion and de-prioritize leaps, with random tie-breaks to keep variety.
+        def motion_key(note: Pitch):
+            prev = self.chorale.get_soprano_note(index - 1) if index > 0 else None
+            if prev is None:
+                return (0, self.random.random())  # no context, keep it mostly random
+            interval = abs(prev.distance_to(note))
+            if interval == 0:
+                category = 12  # repeated note
+            elif interval <= 2:
+                category = 10  # stepwise (m2/M2)
+            elif interval <= 4:
+                category = 15  # small leap (m3/M3)
+            else:
+                category = 30  # larger leap
+            # if contrary motion with bass, prioritize more
+            bass_note = self.chorale.get_bass_note(index)
+            prev_bass = self.chorale.get_bass_note(index - 1) if index > 0 else None
+            if prev_bass is not None and bass_note is not None:
+                bass_motion = bass_note.distance_to(prev_bass)
+                soprano_motion = note.distance_to(prev) if prev is not None else 0
+                motion_product = bass_motion * soprano_motion
+                if motion_product < 0:
+                    category -= 3  # strongly favor contrary motion
+                elif motion_product == 0:
+                    category -= 1  # favor oblique motion
+                else:
+                    category += 3  # disfavor similar motion
+            return (self.random.randint(0, category), self.random.random())
+        
+        candidate_notes = list((i, motion_key(i)) for i in self.chorale.get_soprano_candidates(index))
+        candidate_notes.sort(key=lambda x: x[1])  # sort by motion preference
+        candidate_notes = [i[0] for i in candidate_notes]  # extract sorted notes
+
+        # candidate_notes = list(self.chorale.get_soprano_candidates(index))
+        # self.random.shuffle(candidate_notes)  # randomize order to avoid deterministic patterns
+        
         for candidate in candidate_notes:
             self.chorale.set_soprano_note(index, candidate)
             if not self.chorale.soprano_valid_at(index):
