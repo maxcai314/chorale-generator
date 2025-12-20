@@ -92,7 +92,7 @@ class Chorale:
 
         if prev_soprano_note is not None and prev_prev_soprano_note is not None:
             # check if prev two notes made a leap, for which we need to step in opposite direction
-            melodic_interval = prev_prev_soprano_note.distance_to(soprano_note)
+            melodic_interval = prev_prev_soprano_note.distance_to(prev_soprano_note)
             if is_leap_interval(melodic_interval):
                 step_interval = prev_soprano_note.distance_to(soprano_note)
                 if not is_stepwise_interval(step_interval) or (melodic_interval * step_interval > 0):
