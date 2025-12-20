@@ -63,7 +63,7 @@ MINOR_SCALE_INTERVALS: Dict[ScaleDegree, int] = {
     ScaleDegree.SUBDOMINANT: 5,
     ScaleDegree.DOMINANT: 7,
     ScaleDegree.SUBMEDIANT: 8,
-    ScaleDegree.LEADING_TONE: 10,
+    ScaleDegree.LEADING_TONE: 11,
 }
 
 def scale_degree_to_interval(scale_degree: ScaleDegree, key_signature: KeySignature) -> int:
