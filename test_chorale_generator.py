@@ -178,9 +178,7 @@ if __name__ == "__main__":
         (Pitch.from_note_name("Ab", 3), TonalChord(ScaleDegree.SUBDOMINANT, ChordQuality.MINOR)),
         (Pitch.from_note_name("G", 3), TonalChord(ScaleDegree.DOMINANT, ChordQuality.MAJOR)),
     ]
-    soprano_hints_phrygian_half_cadence = {
-        0: Pitch.from_note_name("G", 4),  # starting pitch
-    }
+    soprano_hints_phrygian_half_cadence = { }
     test_chorale_generator_multi(c_minor_key, bass_harmonizations_phrygian_half_cadence, soprano_hints_phrygian_half_cadence,
                                  seed_seed=24680, num_trials=5,
                                  bpm=120,
