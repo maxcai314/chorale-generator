@@ -137,3 +137,55 @@ if __name__ == "__main__":
                                 seed_seed=12345, num_trials=3, bpm=120,
                                 midi_filename="out/c_minor_prog.mid",
                                 audio_filename="out/c_minor_prog.mp3")
+    
+    c_major_key = KeySignature(Pitch.from_note_name("C"), is_major=True)
+    one_five_one_five_one_bass_harmonizations = [
+        (Pitch.from_note_name("C", 3), TonalChord(ScaleDegree.TONIC, ChordQuality.MAJOR)),
+        (Pitch.from_note_name("B", 2), TonalChord(ScaleDegree.DOMINANT, ChordQuality.MAJOR)),
+        (Pitch.from_note_name("C", 3), TonalChord(ScaleDegree.TONIC, ChordQuality.MAJOR)),
+        (Pitch.from_note_name("F", 3), TonalChord(ScaleDegree.SUBDOMINANT, ChordQuality.MAJOR)),
+        (Pitch.from_note_name("G", 3), TonalChord(ScaleDegree.TONIC, ChordQuality.MAJOR)),
+        (Pitch.from_note_name("G", 3), TonalChord(ScaleDegree.DOMINANT, ChordQuality.MAJOR)),
+        (Pitch.from_note_name("C", 3), TonalChord(ScaleDegree.TONIC, ChordQuality.MAJOR)),
+    ]
+    one_five_one_five_one_soprano_hints = { }
+    test_chorale_generator_multi(c_major_key, one_five_one_five_one_bass_harmonizations, one_five_one_five_one_soprano_hints,
+                                 seed_seed=67890, num_trials=5,
+                                 bpm=120,
+                                 midi_filename="out/test_one_five_one_five_one_chorale_output.mid",
+                                 audio_filename="out/test_one_five_one_five_one_chorale_output.mp3")
+    
+    arpeggiated_bass_harmonizations = [
+        (Pitch.from_note_name("C", 3), TonalChord(ScaleDegree.TONIC, ChordQuality.MAJOR)),
+        (Pitch.from_note_name("E", 3), TonalChord(ScaleDegree.TONIC, ChordQuality.MAJOR)),
+        (Pitch.from_note_name("G", 3), TonalChord(ScaleDegree.TONIC, ChordQuality.MAJOR)),
+        (Pitch.from_note_name("G", 3), TonalChord(ScaleDegree.DOMINANT, ChordQuality.MAJOR)),
+        (Pitch.from_note_name("G", 3), TonalChord(ScaleDegree.TONIC, ChordQuality.MAJOR)),
+        (Pitch.from_note_name("G", 3), TonalChord(ScaleDegree.DOMINANT, ChordQuality.DOMINANT_SEVENTH)),
+        (Pitch.from_note_name("C", 3), TonalChord(ScaleDegree.TONIC, ChordQuality.MAJOR)),
+    ]
+    arpeggiated_soprano_hints = {}
+    test_chorale_generator_multi(c_major_key, arpeggiated_bass_harmonizations, arpeggiated_soprano_hints,
+                                 seed_seed=13579, num_trials=5,
+                                 bpm=120,
+                                 midi_filename="out/test_arpeggiated_chorale_output.mid",
+                                 audio_filename="out/test_arpeggiated_chorale_output.mp3")
+    
+    c_minor_key = KeySignature(Pitch.from_note_name("C"), is_major=False)
+    bass_harmonizations_phrygian_half_cadence = [  # i iv6 iv6 V
+        (Pitch.from_note_name("C", 3), TonalChord(ScaleDegree.TONIC, ChordQuality.MINOR)),
+        (Pitch.from_note_name("Ab", 3), TonalChord(ScaleDegree.SUBDOMINANT, ChordQuality.MINOR)),
+        (Pitch.from_note_name("Ab", 3), TonalChord(ScaleDegree.SUBDOMINANT, ChordQuality.MINOR)),
+        (Pitch.from_note_name("G", 3), TonalChord(ScaleDegree.DOMINANT, ChordQuality.MAJOR)),
+    ]
+    soprano_hints_phrygian_half_cadence = {
+        0: Pitch.from_note_name("G", 4),  # starting pitch
+    }
+    test_chorale_generator_multi(c_minor_key, bass_harmonizations_phrygian_half_cadence, soprano_hints_phrygian_half_cadence,
+                                 seed_seed=24680, num_trials=5,
+                                 bpm=120,
+                                 midi_filename="out/test_phrygian_half_cadence_chorale_output.mid",
+                                 audio_filename="out/test_phrygian_half_cadence_chorale_output.mp3")
+    
+
+
