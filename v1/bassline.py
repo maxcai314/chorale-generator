@@ -1,8 +1,8 @@
 # Bass and harmony. This information should be derivable from figured bass notation.
 # Chorales will be generated from this bassline and tonal harmony.
 
-from pitch import Pitch
-from tonality import ScaleDegree, TonalChord, KeySignature, ChordQuality
+from .pitch import Pitch
+from .tonality import ScaleDegree, TonalChord, KeySignature, ChordQuality
 from typing import List, Tuple
 
 # Represents a bassline with chordal harmony associated with each note.

@@ -2,10 +2,10 @@
 # There is no formal rhythm; each chord aligns with one note in the soprano and one note in the bass.
 
 from typing import List, Optional, Tuple
-from pitch import Pitch
-from tonality import ScaleDegree, TonalChord, KeySignature, ChordQuality, scale_degree_to_interval
-from bassline import HarmonizedBassline
-from chorale import Chorale
+from .pitch import Pitch
+from .tonality import ScaleDegree, TonalChord, KeySignature, ChordQuality, scale_degree_to_interval
+from .bassline import HarmonizedBassline
+from .chorale import Chorale
 from random import Random
 
 class ChoraleGenerator:

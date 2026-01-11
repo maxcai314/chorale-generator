@@ -2,7 +2,7 @@
 
 from typing import List, Dict
 from enum import Enum, IntEnum
-from pitch import Pitch  # Assuming pitch.py is in the same directory
+from .pitch import Pitch
 
 class KeySignature:
     def __init__(self, tonic: Pitch, is_major: bool = True):

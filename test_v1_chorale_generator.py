@@ -1,12 +1,12 @@
 from typing import List, Tuple, Dict
 from random import Random
 
-from pitch import Pitch
-from tonality import ScaleDegree, TonalChord, KeySignature, ChordQuality, scale_degree_to_interval
-from bassline import HarmonizedBassline
-from chorale import Chorale
-from chorale_generator import ChoraleGenerator
-from audio_output import chorale_to_midi_file, chorales_to_midi_file, convert_midi_to_file
+from v1.pitch import Pitch
+from v1.tonality import ScaleDegree, TonalChord, KeySignature, ChordQuality, scale_degree_to_interval
+from v1.bassline import HarmonizedBassline
+from v1.chorale import Chorale
+from v1.chorale_generator import ChoraleGenerator
+from v1.audio_output import chorale_to_midi_file, chorales_to_midi_file, convert_midi_to_file
 
 def test_chorale_generator(key_signature: KeySignature,
                            bass_harmonizations: List[Tuple[Pitch, TonalChord]],

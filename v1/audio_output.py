@@ -5,10 +5,10 @@ import os
 import subprocess
 from typing import List
 
-from pitch import Pitch
-from tonality import ScaleDegree, TonalChord, KeySignature, ChordQuality, scale_degree_to_interval
-from bassline import HarmonizedBassline
-from chorale import Chorale
+from .pitch import Pitch
+from .tonality import ScaleDegree, TonalChord, KeySignature, ChordQuality, scale_degree_to_interval
+from .bassline import HarmonizedBassline
+from .chorale import Chorale
 
 def chorale_to_midi_file(chorale: Chorale, filename: str, bpm: int = 80):
     chorales_to_midi_file([chorale], filename, bpm=bpm)
