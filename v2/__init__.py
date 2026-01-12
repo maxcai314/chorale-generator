@@ -20,7 +20,12 @@ from .chorale import (
     VerticalHarmonization,
     RealizedHarmony,
     Chorale,
+    RealizedChorale
 )
+
+from .chorale_generator import ChoraleGenerator
+
+from .audio_output import chorale_to_midi_file, chorales_to_midi_file, convert_midi_to_file
 
 __all__ = [
     'Pitch',
@@ -29,4 +34,13 @@ __all__ = [
     'KeySignature',
     'ChordQuality',
     'scale_degree_to_interval',
+    'ChordInversion',
+    'VerticalHarmonization',
+    'RealizedHarmony',
+    'Chorale',
+    'RealizedChorale',
+    'ChoraleGenerator',
+    'chorale_to_midi_file',
+    'chorales_to_midi_file',
+    'convert_midi_to_file'
 ]
