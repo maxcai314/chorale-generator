@@ -92,7 +92,11 @@ def is_valid_voice_leading(preprevious: Optional[Tuple[VerticalHarmonization, Re
             return False  # dominant chord 4th doubled
     
     # In second inversion chords, the bass must be doubled; no other tone may be doubled
-    if curr_harmonization.get_inversion() == ChordInversion.SECOND:
+    is_seventh_chord = curr_harmonization.chord.quality in {
+        ChordQuality.MAJOR_SEVENTH, ChordQuality.MINOR_SEVENTH, ChordQuality.DOMINANT_SEVENTH,
+        ChordQuality.HALF_DIMINISHED_SEVENTH, ChordQuality.FULLY_DIMINISHED_SEVENTH
+    }
+    if curr_harmonization.get_inversion() == ChordInversion.SECOND and not is_seventh_chord:
         doubled_tones = curr_voicing.get_doubled_tones()
         if len(doubled_tones) != 1 or doubled_tones[0] != curr_harmonization.bass_note.normalized():
             return False  # invalid doubling in second inversion chord
