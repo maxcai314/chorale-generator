@@ -296,7 +296,7 @@ class TonalChord:
         return result
     
     def __str__(self):
-        return f"{self.quality.value} chord on scale {self.root.truncated} (f{self.roman_numeral_symbol()})"
+        return f"{self.quality.value} chord on scale {self.root.truncated()}"
     
     def __repr__(self):
         return f"TonalChord(root={self.root}, quality={self.quality})"
@@ -339,4 +339,14 @@ if __name__ == "__main__":
     print("Chord tones (relative to key tonic):")
     for tone in v7_chord.get_scale_tones():
         print(f" - {tone}")
-    
+    print()
+
+    # construct iiø7 chord
+    scale_supertonic = TonalInterval.from_size_and_quality(IntervalSize.SECOND, IntervalQuality.MAJOR)
+    ii_half_dim7_chord = TonalChord(root=scale_supertonic, quality=ChordQuality.HALF_DIMINISHED_SEVENTH)
+    print(f"iiø7 chord: {ii_half_dim7_chord}")
+    print(f"Roman numeral: {ii_half_dim7_chord.roman_numeral_symbol()}")
+    print("Chord tones (relative to key tonic):")
+    for tone in ii_half_dim7_chord.get_scale_tones():
+        print(f" - {tone}")
+    print()
