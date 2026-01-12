@@ -186,6 +186,11 @@ class TonalInterval:
     
     def __str__(self):
         return f"{self.quality.value.capitalize()} {self.truncated_size.name.capitalize()} ({self.semitones} semitones, {self.scale_steps} scale steps)"
+    
+    def __eq__(self, other: object) -> bool:
+        if not isinstance(other, TonalInterval):
+            return NotImplemented
+        return self.semitones == other.semitones and self.scale_steps == other.scale_steps
 
 
 class ChordQuality(Enum):
