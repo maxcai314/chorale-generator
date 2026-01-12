@@ -90,20 +90,44 @@ class RealizedHarmony:
         """Returns whether there is any voice crossing in this harmony."""
         return not (self.bass.semitones <= self.tenor.semitones <= self.alto.semitones <= self.soprano.semitones)
     
+    def is_correctly_spaced(self) -> bool:
+        """Returns whether the voices are correctly spaced (no more than an octave between soprano-alto and alto-tenor)."""
+        if self.alto.interval_to(self.soprano).semitones > 12:
+            return False
+        if self.tenor.interval_to(self.alto).semitones > 12:
+            return False
+        return True
+    
     def get_doubled_tones(self) -> List[TonalInterval]:
         """Returns a list of tones that are doubled in this harmony."""
         tone_counts = {}
         for tone in [self.soprano, self.alto, self.tenor, self.bass]:
-            tone_counts[tone.truncated()] = tone_counts.get(tone.truncated(), 0) + 1
+            tone_counts[tone.normalized()] = tone_counts.get(tone.normalized(), 0) + 1
         return [tone for tone, count in tone_counts.items() if count > 1]
+    
+    def contains_tone(self, tone: TonalInterval) -> bool:
+        """Returns whether the given tone is present in this harmony in any octave."""
+        for voice_tone in [self.soprano, self.alto, self.tenor, self.bass]:
+            if voice_tone.normalized() == tone.normalized():
+                return True
+        return False
     
     def __str__(self):
         return f"S:{self.soprano} A:{self.alto} T:{self.tenor} B:{self.bass}"
+    
+    def __eq__(self, value):
+        if not isinstance(value, RealizedHarmony):
+            return NotImplemented
+        return (self.soprano == value.soprano and
+                self.alto == value.alto and
+                self.tenor == value.tenor and
+                self.bass == value.bass)
 
 
 class Chorale:
     """
     Represents a chorale layout with bass line and harmonizations.
+    This class should be not be modified after creation.
     """
     
     def __init__(self, key_signature: KeySignature, harmonizations: Optional[List[VerticalHarmonization]]=None, candidates: Optional[List[RealizedHarmony]]=None):
@@ -147,14 +171,30 @@ class Chorale:
                     if tenor.semitones >= alto.semitones:
                         continue
                     candidate = RealizedHarmony(soprano, alto, tenor, bass_candidate)
-                    if not candidate.has_voice_crossing():
+                    # All chord tones must be represented, unless it's a dominant seventh chord
+                    # where the fifth can be omitted
+                    represented = True
+                    for tone in harmonization.chord.get_scale_tones():
+                        if not candidate.contains_tone(tone):
+                            if harmonization.chord.quality == ChordQuality.DOMINANT_SEVENTH and tone == harmonization.chord.get_scale_tones()[2]:
+                                pass  # fifth can be omitted in this specific chord
+                            else:
+                                represented = False
+                                break
+                    if represented and candidate.is_correctly_spaced() and not candidate.has_voice_crossing():
                         candidates.append(candidate)
         
         for candidate in candidates:
             if candidate.has_voice_crossing():
                 raise ValueError("Generated candidate has voice crossing; this should not happen")
+            if not candidate.is_correctly_spaced():
+                raise ValueError("Generated candidate is not correctly spaced; this should not happen")
 
         return candidates
+    
+    def num_harmonizations(self) -> int:
+        """Returns the number of harmonizations in the chorale."""
+        return len(self.harmonizations)
     
     def __str__(self):
         result = f"Chorale in {self.key_signature}\n"
@@ -167,7 +207,67 @@ class Chorale:
             hint_strs = [f"{self.key_signature.realize_note(hint).name if hint else '-':<5}" for hint in hints]
             result += f"Hints    {'  '.join(hint_strs)}\n"
             result += "\n"
+        # generate a list of roman numeral symbols for each harmonization
+        result += "Harmonization Summary:\n"
+        for i, vh in enumerate(self.harmonizations):
+            result += vh.chord.roman_numeral_symbol()
+            inv = vh.get_inversion()
+            if inv != ChordInversion.ROOT:
+                if vh.chord.quality in {
+                    ChordQuality.MAJOR_SEVENTH, ChordQuality.MINOR_SEVENTH,
+                    ChordQuality.DOMINANT_SEVENTH, ChordQuality.HALF_DIMINISHED_SEVENTH,
+                    ChordQuality.FULLY_DIMINISHED_SEVENTH}:
+                    # seventh chord inversions
+                    if inv == ChordInversion.FIRST:
+                        result += "6/5"
+                    elif inv == ChordInversion.SECOND:
+                        result += "4/3"
+                    elif inv == ChordInversion.THIRD:
+                        result += "4/2"
+                else:
+                    # triad inversions
+                    if inv == ChordInversion.FIRST:
+                        result += "6"
+                    elif inv == ChordInversion.SECOND:
+                        result += "6/4"
+            result += " "
+        result += "\n"
         return result
+
+
+class RealizedChorale:
+    """A chorale with realized soprano, alto, tenor, and bass lines."""
+    
+    def __init__(self, chorale: Chorale, realized_voicings: Optional[List[RealizedHarmony]]=None):
+        self.chorale = chorale
+        if realized_voicings is None:
+            self.realized_voicings = [None for _ in chorale.harmonizations]
+        else:
+            self.realized_voicings = realized_voicings
+    
+    def is_done(self) -> bool:
+        """Returns whether the chorale has been fully realized."""
+        return all(voicing is not None for voicing in self.realized_voicings)
+    
+    def num_realized_voicings(self) -> int:
+        """Returns the number of harmonizations in the chorale."""
+        return len(self.realized_voicings)
+    
+    def __str__(self):
+        result = []
+        result.append(f"Realized Chorale in {self.chorale.key_signature}\n")
+        for i, voicing in enumerate(self.realized_voicings):
+            if voicing is None:
+                result.append(f"{i:03d}:  {'-':<5} {'-':<5}  {'-':<5}  {'-':<5}")
+            else:
+                pitches = [
+                    self.chorale.key_signature.realize_note(voicing.soprano).name,
+                    self.chorale.key_signature.realize_note(voicing.alto).name,
+                    self.chorale.key_signature.realize_note(voicing.tenor).name,
+                    self.chorale.key_signature.realize_note(voicing.bass).name,
+                ]
+                result.append(f"{i:03d}:  {pitches[0]:<5} {pitches[1]:<5}  {pitches[2]:<5}  {pitches[3]:<5}")
+        return "\n".join(result)
 
 
 if __name__ == "__main__":

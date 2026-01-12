@@ -204,6 +204,9 @@ class TonalInterval:
         if not isinstance(other, TonalInterval):
             return NotImplemented
         return self.semitones == other.semitones and self.scale_steps == other.scale_steps
+    
+    def __hash__(self):
+        return hash((self.semitones, self.scale_steps))
 
 # predefined variables for common tonal intervals
 TONIC: TonalInterval = TonalInterval.from_size_and_quality(IntervalSize.UNISON, IntervalQuality.PERFECT)
