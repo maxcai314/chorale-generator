@@ -10,6 +10,16 @@ from .tonality import (
     IntervalSize,
     TonalInterval,
     TonalChord,
+    TONIC, SUPERTONIC, MINOR_MEDIANT, MAJOR_MEDIANT,
+    SUBDOMINANT, DOMINANT, MINOR_SUBMEDIANT, MAJOR_SUBMEDIANT,
+    SUBTONIC, LEADING_TONE
+)
+
+from .chorale import (
+    ChordInversion,
+    VerticalHarmonization,
+    RealizedHarmony,
+    Chorale,
 )
 
 __all__ = [

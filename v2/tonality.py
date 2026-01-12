@@ -17,6 +17,19 @@ class KeySignature:
         self.tonic = tonic
         self.is_major = is_major
     
+    def encode_octave(self, tone: 'TonalInterval', octave_number: int) -> 'TonalInterval':
+        """Encodes the correct desired octave into a TonalInterval for this given key."""
+        basic_pitch = Pitch(self.tonic.midi_index + tone.semitones)
+        octave_shift = octave_number - basic_pitch.octave
+        octave_interval = TonalInterval.from_size_and_quality(IntervalSize.OCTAVE, IntervalQuality.PERFECT)
+        return TonalInterval(
+            semitones=tone.semitones + octave_shift * octave_interval.semitones,
+            scale_steps=tone.scale_steps + octave_shift * octave_interval.scale_steps
+        )
+    
+    def realize_note(self, tone: 'TonalInterval') -> Pitch:
+        return self.tonic.plus_interval(tone.semitones)
+    
     def __str__(self):
         key_type = "Major" if self.is_major else "Minor"
         return f"{self.tonic.note_name} {key_type}"
@@ -191,6 +204,18 @@ class TonalInterval:
         if not isinstance(other, TonalInterval):
             return NotImplemented
         return self.semitones == other.semitones and self.scale_steps == other.scale_steps
+
+# predefined variables for common tonal intervals
+TONIC: TonalInterval = TonalInterval.from_size_and_quality(IntervalSize.UNISON, IntervalQuality.PERFECT)
+SUPERTONIC: TonalInterval = TonalInterval.from_size_and_quality(IntervalSize.SECOND, IntervalQuality.MAJOR)
+MINOR_MEDIANT: TonalInterval = TonalInterval.from_size_and_quality(IntervalSize.THIRD, IntervalQuality.MINOR)
+MAJOR_MEDIANT: TonalInterval = TonalInterval.from_size_and_quality(IntervalSize.THIRD, IntervalQuality.MAJOR)
+SUBDOMINANT: TonalInterval = TonalInterval.from_size_and_quality(IntervalSize.FOURTH, IntervalQuality.PERFECT)
+DOMINANT: TonalInterval = TonalInterval.from_size_and_quality(IntervalSize.FIFTH, IntervalQuality.PERFECT)
+MINOR_SUBMEDIANT: TonalInterval = TonalInterval.from_size_and_quality(IntervalSize.SIXTH, IntervalQuality.MINOR)
+MAJOR_SUBMEDIANT: TonalInterval = TonalInterval.from_size_and_quality(IntervalSize.SIXTH, IntervalQuality.MAJOR)
+SUBTONIC: TonalInterval = TonalInterval.from_size_and_quality(IntervalSize.SEVENTH, IntervalQuality.MINOR)
+LEADING_TONE: TonalInterval = TonalInterval.from_size_and_quality(IntervalSize.SEVENTH, IntervalQuality.MAJOR)
 
 
 class ChordQuality(Enum):
