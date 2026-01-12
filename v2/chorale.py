@@ -155,6 +155,19 @@ class Chorale:
                 raise ValueError("Generated candidate has voice crossing; this should not happen")
 
         return candidates
+    
+    def __str__(self):
+        result = f"Chorale in {self.key_signature}\n"
+        for i, vh in enumerate(self.harmonizations):
+            result += f"Harmonization {i}:\n"
+            bass_note = self.harmonizations[i].bass_note
+            result += f"{self.harmonizations[i].chord.roman_numeral_symbol()} with bass {self.key_signature.realize_note(bass_note).name}\n"
+            result += f"Inversion: {self.harmonizations[i].get_inversion().name}\n"
+            hints = [self.harmonizations[i].soprano_hint, self.harmonizations[i].alto_hint, self.harmonizations[i].tenor_hint, bass_note]
+            hint_strs = [f"{self.key_signature.realize_note(hint).name if hint else '-':<5}" for hint in hints]
+            result += f"Hints    {'  '.join(hint_strs)}\n"
+            result += "\n"
+        return result
 
 
 if __name__ == "__main__":
@@ -173,6 +186,9 @@ if __name__ == "__main__":
     ]
 
     chorale = Chorale(c_major_key, harmonizations)
+    print(chorale)
+    print("Generated Candidates:\n")
+
     for i, candidate_list in enumerate(chorale.candidates):
         print(f"Harmonization {i}:")
         bass_note = chorale.harmonizations[i].bass_note
