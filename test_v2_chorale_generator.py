@@ -110,7 +110,7 @@ if __name__ == "__main__":
     if True:  # DISABLED TEMPORARILY
         # Example: F minor chorale
         f_minor_key = KeySignature(Pitch.from_note_name("F"), is_major=False)
-        # i i6 V viiº4/3 i6 V7 i
+        # i i6 V viiø4/3 i6 V7 i
         f_minor_harmonizations = [
             VerticalHarmonization(
                 bass_note=f_minor_key.encode_octave(TONIC, 2),  # F2
@@ -129,7 +129,7 @@ if __name__ == "__main__":
             ),
             VerticalHarmonization(
                 bass_note=f_minor_key.encode_octave(SUBDOMINANT, 2),  # Bb2
-                chord=TonalChord(root=LEADING_TONE, quality=ChordQuality.FULLY_DIMINISHED_SEVENTH),  # viiº4/3 chord
+                chord=TonalChord(root=LEADING_TONE, quality=ChordQuality.HALF_DIMINISHED_SEVENTH),  # viiº4/3 chord
             ),
             VerticalHarmonization(
                 bass_note=f_minor_key.encode_octave(MINOR_MEDIANT, 2),  # Ab3
