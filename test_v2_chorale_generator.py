@@ -46,7 +46,7 @@ def test_chorale_with_temperatures(
     # Output all generated chorales to MIDI and audio
     if output_chorales:
         print(f"\nGenerating MIDI and audio output to {midi_filename}...")
-        chorales_to_midi_file(output_chorales, midi_filename)
+        chorales_to_midi_file(output_chorales, midi_filename, bpm=92)
         convert_midi_to_file(midi_filename, audio_filename)
         print(f"Done. Output saved to:\n  - {midi_filename}\n  - {audio_filename}")
     else:
@@ -56,7 +56,7 @@ def test_chorale_with_temperatures(
 
 
 if __name__ == "__main__":
-    if False:  # DISABLED TEMPORARILY
+    if True:  # DISABLED TEMPORARILY
         # Example: simple I-V two-chord chorale
         c_major_key = KeySignature(Pitch.from_note_name("C"), is_major=True)
         harmonizations = [
@@ -107,7 +107,7 @@ if __name__ == "__main__":
             audio_filename="out/chorale_c_major_temperature_output.mp3"
         )
 
-    if False:  # DISABLED TEMPORARILY
+    if True:  # DISABLED TEMPORARILY
         # Example: F minor chorale
         f_minor_key = KeySignature(Pitch.from_note_name("F"), is_major=False)
         # i i6 V viiº4/3 i6 V7 i
@@ -156,7 +156,7 @@ if __name__ == "__main__":
             midi_filename="out/chorale_f_minor_temperature_output.mid",
             audio_filename="out/chorale_f_minor_temperature_output.mp3"
         )
-    if False:
+    if True:
         # Example: Complex Five of Five chord
         g_major_key = KeySignature(Pitch.from_note_name("G"), is_major=True)
         # I V6 I I6 IV II6 (aka V6/V) V V7 I
