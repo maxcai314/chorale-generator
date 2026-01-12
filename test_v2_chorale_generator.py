@@ -156,7 +156,7 @@ if __name__ == "__main__":
             midi_filename="out/chorale_f_minor_temperature_output.mid",
             audio_filename="out/chorale_f_minor_temperature_output.mp3"
         )
-    if True:
+    if False:
         # Example: Complex Five of Five chord
         g_major_key = KeySignature(Pitch.from_note_name("G"), is_major=True)
         # I V6 I I6 IV II6 (aka V6/V) V V7 I
@@ -209,4 +209,51 @@ if __name__ == "__main__":
             random_seed=456,
             midi_filename="out/chorale_g_major_five_of_five_temperature_output.mid",
             audio_filename="out/chorale_g_major_five_of_five_temperature_output.mp3"
+        )
+    if True:
+        # e minor
+        e_minor_key = KeySignature(Pitch.from_note_name("E"), is_major=False)
+        # i V7 VI iio6 i6/4 V7 i
+        # bass: E3 B2 C3 A2 B2 B2 E3
+        e_minor_harmonizations = [
+            VerticalHarmonization(
+                bass_note=e_minor_key.encode_octave(TONIC, 3),  # E3
+                chord=TonalChord(root=TONIC, quality=ChordQuality.MINOR),  # i chord
+            ),
+            VerticalHarmonization(
+                bass_note=e_minor_key.encode_octave(DOMINANT, 2),  # B2
+                chord=TonalChord(root=DOMINANT, quality=ChordQuality.DOMINANT_SEVENTH),  # V7 chord
+            ),
+            VerticalHarmonization(
+                bass_note=e_minor_key.encode_octave(MINOR_SUBMEDIANT, 3),  # C3
+                chord=TonalChord(root=MINOR_SUBMEDIANT, quality=ChordQuality.MAJOR),  # VI chord
+            ),
+            VerticalHarmonization(
+                bass_note=e_minor_key.encode_octave(SUBDOMINANT, 2),  # A2
+                chord=TonalChord(root=SUPERTONIC, quality=ChordQuality.DIMINISHED),  # iio6 chord
+            ),
+            VerticalHarmonization(
+                bass_note=e_minor_key.encode_octave(DOMINANT, 2),  # B2
+                chord=TonalChord(root=TONIC, quality=ChordQuality.MINOR),  # i6/4 chord
+            ),
+            VerticalHarmonization(
+                bass_note=e_minor_key.encode_octave(DOMINANT, 2),  # B2
+                chord=TonalChord(root=DOMINANT, quality=ChordQuality.DOMINANT_SEVENTH),  # V7 chord
+            ),
+            VerticalHarmonization(
+                bass_note=e_minor_key.encode_octave(TONIC, 3),  # E3
+                chord=TonalChord(root=TONIC, quality=ChordQuality.MINOR),  # i chord
+            ),
+        ]
+        e_minor_chorale = Chorale(e_minor_key, e_minor_harmonizations)
+        print("Initial E Minor Chorale Puzzle:")
+        print(e_minor_chorale)
+        print("\n" + "="*40 + "\n")
+        temperatures = [0.0, 1.0, 5.0, 100.0]
+        output_chorales_e_minor = test_chorale_with_temperatures(
+            e_minor_chorale,
+            temperatures,
+            random_seed=1337,
+            midi_filename="out/chorale_e_minor_temperature_output.mid",
+            audio_filename="out/chorale_e_minor_temperature_output.mp3"
         )
