@@ -383,3 +383,13 @@ if __name__ == "__main__":
     for tone in ii_half_dim7_chord.get_scale_tones():
         print(f" - {tone}")
     print()
+
+    # construct viio7 chord
+    scale_leading_tone = TonalInterval.from_size_and_quality(IntervalSize.SEVENTH, IntervalQuality.MAJOR)
+    viio7_chord = TonalChord(root=scale_leading_tone, quality=ChordQuality.FULLY_DIMINISHED_SEVENTH)
+    print(f"viio7 chord: {viio7_chord}")
+    print(f"Roman numeral: {viio7_chord.roman_numeral_symbol()}")
+    print("Chord tones (relative to key tonic):")
+    for tone in viio7_chord.get_scale_tones():
+        print(f" - {tone}")
+    print()

@@ -115,6 +115,9 @@ class RealizedHarmony:
     def __str__(self):
         return f"S:{self.soprano} A:{self.alto} T:{self.tenor} B:{self.bass}"
     
+    def __repr__(self):
+        return f"RealizedHarmony(S:{self.soprano}, A:{self.alto}, T:{self.tenor}, B:{self.bass})"
+    
     def __eq__(self, value):
         if not isinstance(value, RealizedHarmony):
             return NotImplemented
@@ -206,6 +209,7 @@ class Chorale:
             hints = [self.harmonizations[i].soprano_hint, self.harmonizations[i].alto_hint, self.harmonizations[i].tenor_hint, bass_note]
             hint_strs = [f"{self.key_signature.realize_note(hint).name if hint else '-':<5}" for hint in hints]
             result += f"Hints    {'  '.join(hint_strs)}\n"
+            result += f"Candidates ({len(self.candidates[i])}):\n"
             result += "\n"
         # generate a list of roman numeral symbols for each harmonization
         result += "Harmonization Summary:\n"
@@ -217,6 +221,7 @@ class Chorale:
                     ChordQuality.MAJOR_SEVENTH, ChordQuality.MINOR_SEVENTH,
                     ChordQuality.DOMINANT_SEVENTH, ChordQuality.HALF_DIMINISHED_SEVENTH,
                     ChordQuality.FULLY_DIMINISHED_SEVENTH}:
+                    result = result[:-1]  # remove 7
                     # seventh chord inversions
                     if inv == ChordInversion.FIRST:
                         result += "6/5"
