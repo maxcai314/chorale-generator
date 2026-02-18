@@ -159,7 +159,7 @@ if __name__ == "__main__":
         
         # Test with different temperatures
         # temperatures = [0.0, 1.0, 5.0, 100.0]
-        temperatures = [100.0]
+        temperatures = [1.0]
         output_chorales = test_chorale_with_temperatures(
             chorale,
             temperatures,
