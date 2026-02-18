@@ -258,7 +258,7 @@ def calculate_voicing_cost(previous: Optional[Tuple[VerticalHarmonization, Reali
         if prev_voicing == curr_voicing:
             cost += MAJOR_PENALTY * 2  # big penalty for no change at all
     
-    return cost * 1000
+    return cost
 
 
 class ChoraleGenerator:

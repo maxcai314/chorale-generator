@@ -31,7 +31,8 @@ def test_chorale_with_temperatures(
     output_chorales = []
     
     for temperature in temperatures:
-        generator = ChoraleGenerator(chorale, random_seed=random_seed, temperature=temperature)
+        chorale_seed = random_seed * int((temperature + 3.14) * 100)  # Vary the seed based on temperature for more diversity
+        generator = ChoraleGenerator(chorale, random_seed=chorale_seed, temperature=temperature)
         print(f"Generating chorale with temperature {temperature}...")
         success = generator.generate()
         
@@ -58,12 +59,13 @@ def test_chorale_with_temperatures(
 if __name__ == "__main__":
     if True:  # DISABLED TEMPORARILY
         # Example: simple I-V two-chord chorale
+        # I V I I I6/4 V I
         c_major_key = KeySignature(Pitch.from_note_name("C"), is_major=True)
         harmonizations = [
             VerticalHarmonization(
                 bass_note=c_major_key.encode_octave(TONIC, 3),  # C3
                 chord=TonalChord(root=TONIC, quality=ChordQuality.MAJOR),  # I chord
-                soprano_hint=c_major_key.encode_octave(MAJOR_MEDIANT, 5),  # E5
+                # soprano_hint=c_major_key.encode_octave(MAJOR_MEDIANT, 5),  # E5
             ),
             VerticalHarmonization(
                 bass_note=c_major_key.encode_octave(DOMINANT, 2),  # G2
@@ -98,7 +100,7 @@ if __name__ == "__main__":
         print("\n" + "="*40 + "\n")
         
         # Test with different temperatures
-        temperatures = [0.0, 1.0, 5.0, 100.0]
+        temperatures = [0.0, 5.0, 10.0, 100.0]
         output_chorales = test_chorale_with_temperatures(
             chorale,
             temperatures,
@@ -158,8 +160,8 @@ if __name__ == "__main__":
         print("\n" + "="*40 + "\n")
         
         # Test with different temperatures
-        # temperatures = [0.0, 1.0, 5.0, 100.0]
-        temperatures = [1.0]
+        temperatures = [0.0, 7.0, 10.0, 100.0]
+        # temperatures = [1.0]
         output_chorales = test_chorale_with_temperatures(
             chorale,
             temperatures,
@@ -209,7 +211,7 @@ if __name__ == "__main__":
         print("Initial F Minor Chorale Puzzle:")
         print(f_minor_chorale)
         print("\n" + "="*40 + "\n")
-        temperatures = [0.0, 1.0, 5.0, 100.0]
+        temperatures = [0.0, 5.0, 10.0, 100.0]
         output_chorales_minor = test_chorale_with_temperatures(
             f_minor_chorale,
             temperatures,
@@ -223,15 +225,15 @@ if __name__ == "__main__":
         # I V6 I I6 IV II6 (aka V6/V) V V7 I
         five_of_five_harmonizations = [
             VerticalHarmonization(
-                bass_note=g_major_key.encode_octave(TONIC, 2),  # G2
+                bass_note=g_major_key.encode_octave(TONIC, 3),  # Ge
                 chord=TonalChord(root=TONIC, quality=ChordQuality.MAJOR),  # I chord
             ),
             VerticalHarmonization(
-                bass_note=g_major_key.encode_octave(LEADING_TONE, 2),  # F#2
+                bass_note=g_major_key.encode_octave(LEADING_TONE, 3),  # F#3
                 chord=TonalChord(root=DOMINANT, quality=ChordQuality.MAJOR),  # V chord
             ),
             VerticalHarmonization(
-                bass_note=g_major_key.encode_octave(TONIC, 2),  # G2
+                bass_note=g_major_key.encode_octave(TONIC, 3),  # G3
                 chord=TonalChord(root=TONIC, quality=ChordQuality.MAJOR),  # I chord
             ),
             VerticalHarmonization(
@@ -263,7 +265,7 @@ if __name__ == "__main__":
         print("Initial G Major Five of Five Chorale Puzzle:")
         print(five_of_five_chorale)
         print("\n" + "="*40 + "\n")
-        temperatures = [0.0, 1.0, 5.0, 100.0]
+        temperatures = [0.0, 5.0, 10.0, 100.0]
         output_chorales_five_of_five = test_chorale_with_temperatures(
             five_of_five_chorale,
             temperatures,
@@ -310,7 +312,7 @@ if __name__ == "__main__":
         print("Initial E Minor Chorale Puzzle:")
         print(e_minor_chorale)
         print("\n" + "="*40 + "\n")
-        temperatures = [0.0, 1.0, 5.0, 100.0]
+        temperatures = [0.0, 5.0, 10.0, 100.0]
         output_chorales_e_minor = test_chorale_with_temperatures(
             e_minor_chorale,
             temperatures,
@@ -321,7 +323,7 @@ if __name__ == "__main__":
 
     if True:
         # Canon in D Chords
-        # I - V - vi - iii - IV - I - IV - V - I
+        # I V vi iii IV I IV V
         d_major_key = KeySignature(Pitch.from_note_name("D"), is_major=True)
         canon_in_d_harmonizations = [
             VerticalHarmonization(
@@ -356,16 +358,16 @@ if __name__ == "__main__":
                 bass_note=d_major_key.encode_octave(DOMINANT, 2),  # A2
                 chord=TonalChord(root=DOMINANT, quality=ChordQuality.MAJOR),  # V chord
             ),
-            VerticalHarmonization(
-                bass_note=d_major_key.encode_octave(TONIC, 3),  # D3
-                chord=TonalChord(root=TONIC, quality=ChordQuality.MAJOR),  # I chord
-            ),
+            # VerticalHarmonization(
+            #     bass_note=d_major_key.encode_octave(TONIC, 3),  # D3
+            #     chord=TonalChord(root=TONIC, quality=ChordQuality.MAJOR),  # I chord
+            # ),
         ]
         canon_in_d_chorale = Chorale(d_major_key, canon_in_d_harmonizations)
         print("Initial Canon in D Chorale Puzzle:")
         print(canon_in_d_chorale)
         print("\n" + "="*40 + "\n")
-        temperatures = [0.0, 1.0, 5.0, 100.0]
+        temperatures = [0.0, 5.0, 10.0, 100.0]
         output_chorales_canon_in_d = test_chorale_with_temperatures(
             canon_in_d_chorale,
             temperatures,
