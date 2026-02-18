@@ -1,3 +1,5 @@
 # chorale-generator
 
 Generate Bach-style chorales based on the rules of AP Music Theory
+
+Read the blog [here](https://max.xz.ax/blog/music-theory-chorale-generator/)
