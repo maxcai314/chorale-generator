@@ -64,6 +64,9 @@ class ChoraleGenerator:
 
         # candidate_notes = list(self.chorale.get_soprano_candidates(index))
         # self.random.shuffle(candidate_notes)  # randomize order to avoid deterministic patterns
+
+        # [debug] reverse order of candidates to simulate worst strategy
+        # candidate_notes.reverse()
         
         for candidate in candidate_notes:
             self.chorale.set_soprano_note(index, candidate)

@@ -166,8 +166,8 @@ def is_valid_voice_leading(preprevious: Optional[Tuple[VerticalHarmonization, Re
 
 
 MINOR_PENALTY = 1
-MEDIUM_PENALTY = 5
-MAJOR_PENALTY = 10
+MEDIUM_PENALTY = 3
+MAJOR_PENALTY = 5
 
 def calculate_voicing_cost(previous: Optional[Tuple[VerticalHarmonization, RealizedHarmony]], current: Tuple[VerticalHarmonization, RealizedHarmony]) -> int:
     """Calculates a cost for the given voicing choice. Lower is better."""
@@ -185,19 +185,21 @@ def calculate_voicing_cost(previous: Optional[Tuple[VerticalHarmonization, Reali
                 cost += MEDIUM_PENALTY  # medium penalty for not choosing common tone
             if interval_size > IntervalSize.THIRD:
                 cost += interval_size * MINOR_PENALTY  # additional penalty for even larger motions
-        # prefer stepwise in soprano; give a minor penalty for static motion
+        # prefer stepwise in soprano (or conjunct)
         soprano_melodic_interval = prev_voicing.soprano.interval_to(curr_voicing.soprano)
         soprano_interval_size = abs(soprano_melodic_interval.scale_steps)
         if soprano_interval_size == 0:
-            cost += MINOR_PENALTY  # minor penalty for static (boring) motion
+            # cost += MINOR_PENALTY  # minor penalty for static (boring) motion
             if prev_voicing.bass == curr_voicing.bass:
                 cost += MEDIUM_PENALTY  # extra penalty for both soprano and bass static, super boring
         elif soprano_interval_size == IntervalSize.SECOND:
             cost += 0  # no penalty for stepwise motion
         elif soprano_interval_size == IntervalSize.THIRD:
-            cost += MINOR_PENALTY  # minor penalty for third
+            # cost += MINOR_PENALTY  # minor penalty for third
+            cost += 0  # no penalty for third, since sometimes it's nice to have a little bit of motion in the soprano
         elif soprano_interval_size == IntervalSize.FOURTH or soprano_interval_size == IntervalSize.FIFTH:
-            cost += MINOR_PENALTY * 2  # double penalty for fourth or fifth
+            # cost += MINOR_PENALTY * 2  # double penalty for fourth or fifth
+            cost += MEDIUM_PENALTY  # medium penalty for fourth or fifth, since we generally want to avoid large leaps in the soprano
     
     # Prefer contrary motion between soprano and bass
     if previous is not None:
@@ -256,7 +258,7 @@ def calculate_voicing_cost(previous: Optional[Tuple[VerticalHarmonization, Reali
         if prev_voicing == curr_voicing:
             cost += MAJOR_PENALTY * 2  # big penalty for no change at all
     
-    return cost
+    return cost * -1000
 
 
 class ChoraleGenerator:

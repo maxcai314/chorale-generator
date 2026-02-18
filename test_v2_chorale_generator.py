@@ -66,7 +66,7 @@ if __name__ == "__main__":
                 soprano_hint=c_major_key.encode_octave(MAJOR_MEDIANT, 5),  # E5
             ),
             VerticalHarmonization(
-                bass_note=c_major_key.encode_octave(DOMINANT, 3),  # G3
+                bass_note=c_major_key.encode_octave(DOMINANT, 2),  # G2
                 chord=TonalChord(root=DOMINANT, quality=ChordQuality.MAJOR),  # V chord
             ),
             VerticalHarmonization(
@@ -78,11 +78,11 @@ if __name__ == "__main__":
                 chord=TonalChord(root=TONIC, quality=ChordQuality.MAJOR),  # I chord
             ),
             VerticalHarmonization(
-                bass_note=c_major_key.encode_octave(DOMINANT, 3),  # G3
+                bass_note=c_major_key.encode_octave(DOMINANT, 2),  # G2
                 chord=TonalChord(root=TONIC, quality=ChordQuality.MAJOR),  # I chord
             ),
             VerticalHarmonization(
-                bass_note=c_major_key.encode_octave(DOMINANT, 3),  # G3
+                bass_note=c_major_key.encode_octave(DOMINANT, 2),  # G2
                 chord=TonalChord(root=DOMINANT, quality=ChordQuality.MAJOR),  # V chord
             ),
             VerticalHarmonization(
@@ -106,6 +106,67 @@ if __name__ == "__main__":
             midi_filename="out/chorale_c_major_temperature_output.mid",
             audio_filename="out/chorale_c_major_temperature_output.mp3"
         )
+    
+    if True:  # DISABLED TEMPORARILY
+        # More advanced C major chorale
+        # I IV6/4 I V6 I vi ii V I
+        c_major_key = KeySignature(Pitch.from_note_name("C"), is_major=True)
+        harmonizations = [
+            VerticalHarmonization(
+                bass_note=c_major_key.encode_octave(TONIC, 3),  # C3
+                chord=TonalChord(root=TONIC, quality=ChordQuality.MAJOR),  # I chord
+                soprano_hint=c_major_key.encode_octave(MAJOR_MEDIANT, 5),  # E5
+            ),
+            VerticalHarmonization(
+                bass_note=c_major_key.encode_octave(TONIC, 3),  # C3
+                chord=TonalChord(root=SUBDOMINANT, quality=ChordQuality.MAJOR),  # IV chord
+            ),
+            VerticalHarmonization(
+                bass_note=c_major_key.encode_octave(TONIC, 3),  # C3
+                chord=TonalChord(root=TONIC, quality=ChordQuality.MAJOR),  # I chord
+            ),
+            VerticalHarmonization(
+                bass_note=c_major_key.encode_octave(LEADING_TONE, 2),  # B2
+                chord=TonalChord(root=DOMINANT, quality=ChordQuality.MAJOR),  # V chord
+            ),
+            VerticalHarmonization(
+                bass_note=c_major_key.encode_octave(TONIC, 3),  # C3
+                chord=TonalChord(root=TONIC, quality=ChordQuality.MAJOR),  # I chord
+            ),
+            VerticalHarmonization(
+                bass_note=c_major_key.encode_octave(MAJOR_SUBMEDIANT, 2),  # A2
+                chord=TonalChord(root=MAJOR_SUBMEDIANT, quality=ChordQuality.MINOR),  # vi chord
+            ),
+            VerticalHarmonization(
+                bass_note=c_major_key.encode_octave(SUPERTONIC, 2),  # D2
+                chord=TonalChord(root=SUPERTONIC, quality=ChordQuality.MINOR),  # ii chord
+            ),
+            VerticalHarmonization(
+                bass_note=c_major_key.encode_octave(DOMINANT, 2),  # G2
+                chord=TonalChord(root=DOMINANT, quality=ChordQuality.MAJOR),  # V chord
+            ),
+            VerticalHarmonization(
+                bass_note=c_major_key.encode_octave(TONIC, 2),  # C2
+                chord=TonalChord(root=TONIC, quality=ChordQuality.MAJOR),  # I chord
+            ),
+        ]
+
+        # Create the chorale puzzle
+        chorale = Chorale(c_major_key, harmonizations)
+        print("Initial Advanced Chorale Puzzle:")
+        print(chorale)
+        print("\n" + "="*40 + "\n")
+        
+        # Test with different temperatures
+        # temperatures = [0.0, 1.0, 5.0, 100.0]
+        temperatures = [100.0]
+        output_chorales = test_chorale_with_temperatures(
+            chorale,
+            temperatures,
+            random_seed=42,
+            midi_filename="out/chorale_c_major_advanced_temperature_output.mid",
+            audio_filename="out/chorale_c_major_advanced_temperature_output.mp3"
+        )
 
     if True:  # DISABLED TEMPORARILY
         # Example: F minor chorale
@@ -120,7 +181,7 @@ if __name__ == "__main__":
                 tenor_hint=f_minor_key.encode_octave(MINOR_MEDIANT, 3),  # Ab3
             ),
             VerticalHarmonization(
-                bass_note=f_minor_key.encode_octave(MINOR_MEDIANT, 2),  # Ab3
+                bass_note=f_minor_key.encode_octave(MINOR_MEDIANT, 2),  # Ab2
                 chord=TonalChord(root=TONIC, quality=ChordQuality.MINOR),  # i chord
             ),
             VerticalHarmonization(
@@ -162,15 +223,15 @@ if __name__ == "__main__":
         # I V6 I I6 IV II6 (aka V6/V) V V7 I
         five_of_five_harmonizations = [
             VerticalHarmonization(
-                bass_note=g_major_key.encode_octave(TONIC, 3),  # G3
+                bass_note=g_major_key.encode_octave(TONIC, 2),  # G2
                 chord=TonalChord(root=TONIC, quality=ChordQuality.MAJOR),  # I chord
             ),
             VerticalHarmonization(
-                bass_note=g_major_key.encode_octave(LEADING_TONE, 3),  # F#3
+                bass_note=g_major_key.encode_octave(LEADING_TONE, 2),  # F#2
                 chord=TonalChord(root=DOMINANT, quality=ChordQuality.MAJOR),  # V chord
             ),
             VerticalHarmonization(
-                bass_note=g_major_key.encode_octave(TONIC, 3),  # G3
+                bass_note=g_major_key.encode_octave(TONIC, 2),  # G2
                 chord=TonalChord(root=TONIC, quality=ChordQuality.MAJOR),  # I chord
             ),
             VerticalHarmonization(
@@ -256,4 +317,59 @@ if __name__ == "__main__":
             random_seed=1337,
             midi_filename="out/chorale_e_minor_temperature_output.mid",
             audio_filename="out/chorale_e_minor_temperature_output.mp3"
+        )
+
+    if True:
+        # Canon in D Chords
+        # I - V - vi - iii - IV - I - IV - V - I
+        d_major_key = KeySignature(Pitch.from_note_name("D"), is_major=True)
+        canon_in_d_harmonizations = [
+            VerticalHarmonization(
+                bass_note=d_major_key.encode_octave(TONIC, 3),  # D3
+                chord=TonalChord(root=TONIC, quality=ChordQuality.MAJOR),  # I chord
+            ),
+            VerticalHarmonization(
+                bass_note=d_major_key.encode_octave(DOMINANT, 2),  # A2
+                chord=TonalChord(root=DOMINANT, quality=ChordQuality.MAJOR),  # V chord
+            ),
+            VerticalHarmonization(
+                bass_note=d_major_key.encode_octave(MAJOR_SUBMEDIANT, 2),  # B2
+                chord=TonalChord(root=MAJOR_SUBMEDIANT, quality=ChordQuality.MINOR),  # vi chord
+            ),
+            VerticalHarmonization(
+                bass_note=d_major_key.encode_octave(MAJOR_MEDIANT, 2),  # F#2
+                chord=TonalChord(root=MAJOR_MEDIANT, quality=ChordQuality.MINOR),  # iii chord
+            ),
+            VerticalHarmonization(
+                bass_note=d_major_key.encode_octave(SUBDOMINANT, 2),  # G2
+                chord=TonalChord(root=SUBDOMINANT, quality=ChordQuality.MAJOR),  # IV chord
+            ),
+            VerticalHarmonization(
+                bass_note=d_major_key.encode_octave(TONIC, 2),  # D2
+                chord=TonalChord(root=TONIC, quality=ChordQuality.MAJOR),  # I chord
+            ),
+            VerticalHarmonization(
+                bass_note=d_major_key.encode_octave(SUBDOMINANT, 2),  # G2
+                chord=TonalChord(root=SUBDOMINANT, quality=ChordQuality.MAJOR),  # IV chord
+            ),
+            VerticalHarmonization(
+                bass_note=d_major_key.encode_octave(DOMINANT, 2),  # A2
+                chord=TonalChord(root=DOMINANT, quality=ChordQuality.MAJOR),  # V chord
+            ),
+            VerticalHarmonization(
+                bass_note=d_major_key.encode_octave(TONIC, 3),  # D3
+                chord=TonalChord(root=TONIC, quality=ChordQuality.MAJOR),  # I chord
+            ),
+        ]
+        canon_in_d_chorale = Chorale(d_major_key, canon_in_d_harmonizations)
+        print("Initial Canon in D Chorale Puzzle:")
+        print(canon_in_d_chorale)
+        print("\n" + "="*40 + "\n")
+        temperatures = [0.0, 1.0, 5.0, 100.0]
+        output_chorales_canon_in_d = test_chorale_with_temperatures(
+            canon_in_d_chorale,
+            temperatures,
+            random_seed=2024,
+            midi_filename="out/chorale_canon_in_d_temperature_output.mid",
+            audio_filename="out/chorale_canon_in_d_temperature_output.mp3"
         )

@@ -24,8 +24,8 @@ def chorales_to_midi_file(chorales: List[RealizedChorale], filename: str, bpm: i
     # https://midiprog.com/program-numbers/
     track.append(Message('program_change', program=0, time=0))
 
-    attack_velocity = 96
-    note_offset = tpb // 256  # slight offset to avoid note-on and note-off at same tick
+    attack_velocites = [120, 105, 110, 127]  # velocities for soprano, alto, tenor, bass
+    note_offset = tpb // 256  # slight offset between pedal off and next note
 
     for chorale in chorales:
         # Play all four notes together for each chord
@@ -38,20 +38,22 @@ def chorales_to_midi_file(chorales: List[RealizedChorale], filename: str, bpm: i
             # Sustain pedal on
             track.append(Message('control_change', control=64, value=127, time=0))
 
-            for midi_pitch in all_midi_pitches:
-                track.append(Message('note_on', note=midi_pitch, velocity=attack_velocity, time=0))
+            for j, midi_pitch in enumerate(all_midi_pitches):
+                note_attack_velocity = attack_velocites[j]
+                track.append(Message('note_on', note=midi_pitch, velocity=note_attack_velocity, time=0))
 
             # Hold notes for a half note (2 beats)
             duration_ticks = tpb * 2
             if i == chorale.num_realized_voicings() - 1:
                 duration_ticks = tpb * 4  # last chord held for whole note
 
-            for midi_pitch in all_midi_pitches:
-                track.append(Message('note_off', note=midi_pitch, velocity=attack_velocity, time=0))
+            for j, midi_pitch in enumerate(all_midi_pitches):
+                note_release_velocity = 100
+                track.append(Message('note_off', note=midi_pitch, velocity=note_release_velocity, time=0))
             
             # wait for duration
             track.append(Message('note_on', note=0, velocity=0, time=duration_ticks - note_offset))
-            
+
             # Sustain pedal off
             track.append(Message('control_change', control=64, value=0, time=0))
 
